@@ -47,7 +47,7 @@ include "koneksi.php";
                         </tr>
                     </table>
                     <?php
-                    $sql=mysqli_query($konek, "SELECT * FROM masuk WHERE no_serial='$_POST[noijazah]'");
+                    $sql=mysqli_query($konek, "SELECT * FROM masuk WHERE no_serial='$_POST[serial]'");
                     $d=mysqli_fetch_array($sql);
 
                     if(mysqli_num_rows($sql) < 1){
