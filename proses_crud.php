@@ -41,7 +41,7 @@ if(isset($_GET['act'])){
 			
 				#parameter inputan
 				$isi_teks = $nomor;
-				$namafile = $pkjd.".png";
+				$namafile = $namaBarang.".png";
 				$quality = 'H'; //ada 4 pilihan, L (Low), M(Medium), Q(Good), H(High)
 				$ukuran = 5; //batasan 1 paling kecil, 10 paling besar
 				$padding = 2;
@@ -59,13 +59,47 @@ if(isset($_GET['act'])){
 		$serial = $_POST['no_serial'];
 		$gudang = $_POST['gudang'];
 		$status = $_POST['status'];
+		$oldName = $_POST['oldName'];
 
-		mysqli_query($konek, "UPDATE masuk SET nama_barang='$nama', no_serial='$serial', gudang_id_gudang='$gudang', status_id_status='$status' WHERE id_barang='$id'");
+		$edit = mysqli_query($konek, "UPDATE masuk SET nama_barang='$nama', no_serial='$serial', gudang_id_gudang='$gudang', status_id_status='$status' WHERE id_barang='$id'");
+		if($edit){
+				
+				$path = "temp/";
+				$filename = $path . $oldName . '.png';
+				//jika file di folder temp ada, maka hapus 
+				if (file_exists($filename)) {
+					unlink($filename);
+				}
 
+				// BUAT QRCODE
+				// tampung data kiriman
+				$nomor = $serial;
+				// include file qrlib.php
+				include "phpqrcode/qrlib.php";
+			
+				#parameter inputan
+				$isi_teks = $nomor;
+				$namafile = $nama.".png";
+				$quality = 'H'; //ada 4 pilihan, L (Low), M(Medium), Q(Good), H(High)
+				$ukuran = 5; //batasan 1 paling kecil, 10 paling besar
+				$padding = 2;
+			
+				QRCode::png($isi_teks,$path.$namafile,$quality,$ukuran,$padding);
+			}
 		header('location:index.php#intro');
 	} else if($_GET['act'] == 'delete'){
 		$id = $_GET['id'];
-		mysqli_query($konek, "DELETE FROM masuk WHERE id_barang='$id'") ;
+		$namaBarang = $_GET['namaBarang'];
+		// mysqli_query($konek, "DELETE FROM masuk WHERE id_barang='$id'") ;
+		mysqli_query($konek, "DELETE FROM masuk WHERE nama_barang='$namaBarang'") ;
+		
+		$path = "temp/";
+		$file = $_FILES["$namaBarang"];
+		$filename = $path . $namaBarang . '.png';
+		// //jika file di folder temp ada, maka hapus 
+		if (file_exists($filename)) {
+			unlink($filename);
+		}
 		header ('location:index.php');
 	} else if($_GET['act']=='insert_keluar'){
 		//variabel dari elemen form
@@ -104,6 +138,32 @@ if(isset($_GET['act'])){
 
 		mysqli_query($konek, "UPDATE masuk SET nama_barang='$namabarang', no_serial='$serial', gudang_id_gudang='$gudang', status_id_status='1' WHERE id_barang='$idbarang'");
 		header('location:index.php#report');
+	}else if($_GET['act'] == 'download'){
+		if (isset($_GET['nb'])) {
+			$nb    = $_GET['nb'];
+		
+			$path   ="temp/";
+			$filename = $path . $nb . '.png';
+			 
+				if (file_exists($filename)) {
+					header('Content-Description: File Transfer');
+					header('Content-Type: application/octet-stream');
+					header('Content-Disposition: attachment; filename='.basename($filename));
+					header('Content-Transfer-Encoding: binary');
+					header('Expires: 0');
+					header('Cache-Control: private');
+					header('Pragma: private');
+					header('Content-Length: ' . filesize($filename));
+					ob_clean();
+					flush();
+					readfile($filename);
+					exit; 
+				} 
+				else {
+					$_SESSION['pesan'] = "Oops! File - $nb - not found ...";
+					header("location:index.php");
+				}
+			}
 	}else{
 		header('location:index.php#intro');
 	}// akhir proses simpan data

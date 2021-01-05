@@ -52,7 +52,7 @@
 <script type="text/javascript" src="js/webcodecamjquery.js"></script>
 <script type="text/javascript">
     var arg = {
-        resultFunction: function(result) {
+        redirectPost: function(result) {
             //$('.hasilscan').append($('<input name="noijazah" value=' + result.code + ' readonly><input type="submit" value="Cek"/>'));
            // $.post("../cek.php", { noijazah: result.code} );
             var redirect = '../cek.php';
@@ -61,7 +61,7 @@
     };
     
     var decoder = $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery;
-    decoder.buildSelectMenu("select");
+   // decoder.buildSelectMenu("select");
     decoder.play();
     /*  Without visible select menu
         decoder.buildSelectMenu(document.createElement('select'), 'environment|back').init(arg).play();

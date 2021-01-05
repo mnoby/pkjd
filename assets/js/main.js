@@ -295,7 +295,7 @@
 					$('<div class="close">Close</div>')
 						.appendTo($this)
 						.on('click', function() {
-							location.hash = '';
+							location.href='index.php'
 						});
 
 				// Prevent clicks from inside article from bubbling.
@@ -304,6 +304,8 @@
 					});
 
 			});
+
+			
 
 		// Events.
 			$body.on('click', function(event) {

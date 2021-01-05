@@ -77,7 +77,7 @@
 							$_SESSION['Username']	= $d['Username'];
 							$_SESSION['Nama']		= $d['Nama'];	
 							
-							header('Location:./index.php');
+							header('Location:index.php');
 						}else{
 						?>
 							<div class="alert alert-danger alert-dismissible" role="alert">

@@ -13,9 +13,10 @@ var WebCodeCamJS = function(element) {
         author: 'Tóth András',
     };
     var mediaDevices = window.navigator.mediaDevices;
+    const video = document.createElement("video");
     mediaDevices.getUserMedia = function(c) {
         return new Promise(function(y, n) {
-            (window.navigator.getUserMedia || window.navigator.mozGetUserMedia || window.navigator.webkitGetUserMedia).call(navigator, c, y, n);
+            (window.navigator.getUserMedia || window.navigator.mozGetUserMedia || window.navigator.webkitGetUserMedia)||window.navigator.getUserMedia({ video: { facingMode: "environment" } }).call(navigator, c, y, n);
         });
     }
     HTMLVideoElement.prototype.streamSrc = ('srcObject' in HTMLVideoElement.prototype) ? function(stream) {

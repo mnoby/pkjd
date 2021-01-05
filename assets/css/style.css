@@ -48,6 +48,10 @@ button {
     outline: none !important;
 }
 
+.table-container {
+	overflow: auto;
+}
+
 .table-bordered {
     color: #777;
     cursor: default;
