@@ -281,64 +281,9 @@
 			<div class="panel-body text-center" >
 			<!-- <a href="./validasi-ijazah"> Scan Now</a> -->
 		        <canvas></canvas>
-	        <hr>
-		        <select></select>
 	    	</div>
 
-			<script type="text/javascript" src="js/jquery.js"></script>
-			<script type="text/javascript" src="js/qrcodelib.js"></script>
-			<script type="text/javascript" src="js/webcodecamjquery.js"></script>
-
-<!-- SCAN CODE -->
-			<script type="text/javascript">
-			    var arg = 
-			    {
-			        redirectPost: function(result) 
-			        {
-			            //$('.hasilscan').append($('<input name="noijazah" value=' + result.code + ' readonly><input type="submit" value="Cek"/>'));
-			           // $.post("../cek.php", { noijazah: result.code} );
-			            var redirect = 'index.php?view=hasil#work';
-			            $.redirectPost(redirect, {serial: result.code});
-			        }
-
-			    };
-			    
-
-
-			    var url = window.location.toString();
-			    var url2 = 0;
-			    var decoder = $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery;
-			    // decoder.buildSelectMenu("select")data;
-
-			    // while(url2){
-			    // if (url == "localhost/pkjd/index.php#work") {
-			    	decoder.play();
-			    /*  Without visible select menu
-			        decoder.buildSelectMenu(document.createElement('select'), 'environment|back').init(arg).play();
-			    */
-				// } else {
-				// 	decoder.stop();
-
-				// }
-			// }
-			    $('select').on('change', function()
-			    {
-			        decoder.stop().play();
-			    });
-
-			    // jquery extend function
-			    $.extend(
-			    {
-			        redirectPost: function(location, args)
-			        {
-			            var form = '';
-			            $.each( args, function( key, value ) {
-			                form += '<input type="hidden" name="'+key+'" value="'+value+'">';
-			            });
-			            $('<form action="'+location+'" method="POST">'+form+'</form>').appendTo('body').submit();
-			        }
-			    });
-			</script>
+			
 			
 <?php
 	break;
@@ -348,7 +293,7 @@
 			<h2 class="major">Scan Berhasil!</h2>
 			<span class="image main"></span>
 <?php
-        $sql=mysqli_query($konek, "SELECT * FROM masuk WHERE no_serial='$_POST[serial]'");
+        $sql=mysqli_query($konek, "SELECT * FROM (masuk msk left JOIN status sts on msk.status_id_status = sts.id_status) WHERE msk.no_serial='$_POST[serial]'");
         $d=mysqli_fetch_array($sql);
         if(mysqli_num_rows($sql) < 1){
 ?>
@@ -363,10 +308,57 @@
 <?php
         }else{
 ?>
-				<label for='nama_barang' style='padding-top:0px'>&nbsp;Nama Barang : <?php echo $d['nama_barang'];?></label>
-				<label for='nama_barang' style='padding-top:0px'>&nbsp;Nomor Serial : <?php echo $d['no_serial'];?></label>	
-			 	<!-- <input id='nama_barang' class='form-content' type='text' name='nama_barang' autocomplete='on' value ="<?php echo $d['nama_barang']; ?>" required />
- -->
+				<form method="post" action="proses_crud.php?act=insert_keluar">
+				<div class="fields">
+					<div class="field half">
+				<input type="hidden" name="id_barang" value="<?php echo $d['id_barang']; ?>">
+				<input type="hidden" name="gudang" value="<?php echo $d['gudang_id_gudang']; ?>">
+				<input type="hidden" name="status" value="<?php echo $d['status_id_status'] ;?>">
+				<input type="hidden" name="tanggal" value="">
+
+				<input id='nama_barang' readonly class='form-content' type='text' name='nama_barang' autocomplete='on' value="<?php echo $d['nama_barang'];?>" />
+				<label for='nama_barang' style='padding-top:0px;'>&nbsp;Nama Barang  </label>
+	
+				<input id='no_serial' readonly class='form-content' type='text' name='no_serial' autocomplete='on' value="<?php echo $d['no_serial'];?>"/>
+				<label for='no_serial' style='padding-top:0px'>&nbsp;Nomor Serial  </label>
+	
+				<input id='status' readonly type='text' name='status' autocomplete='on' value="<?php echo $d['status'];?>" />
+				<label for='status' style='padding-top:0px'>&nbsp;Status </label>
+				
+
+<?php
+	if ($d['status_id_status'] == 2) {
+?>
+				
+<?php
+	} else {
+?>
+				
+			 	<input id='nama_client' class='form-content' type='text' name='nama_client' autocomplete='on' placeholder="Masukkan Nama Pengambil Barang" required="" />
+			 	<label for='nama_client' style='padding-top:0px; ;'>&nbsp;Nama PIC </label>
+<?php
+	}
+?>
+			 		</div>
+			 	</div>
+
+			 	<ul class="actions" style="padding-top:0px;">
+<?php
+	if ($d['status_id_status'] == 2) {
+?>
+		<li><input type="submit" style="position: right; display:none;" value="SIMPAN" class="primary" /></li>
+<?php
+	} else {
+?>
+		<li style="padding-top:0px;"><input type="submit" style="position: right;" value="SIMPAN" class="primary" /></li>
+<?php
+	}
+?>
+					<li style="padding-top:0px;"><a class="primary" style="background-color: #FFF; border-radius: 4px; border: 0; box-shadow: inset 0 0 0 1px #ffffff; color: #1b1f22 !important; cursor: pointer; display: inline-block; font-size: 0.8rem; font-weight: 600; height: 2.75rem; letter-spacing: 0.2rem; line-height: 2.75rem; outline: 0; padding: 0 1.25rem 0 1.35rem; text-align: center; text-decoration: none; text-transform: uppercase; white-space: nowrap;" href="index.php#work"> Kembali </a></li>
+
+				</ul>
+
+           </form>
            
 <?php 	} 
 ?>
@@ -429,14 +421,15 @@
 				<input type="hidden" name="status" value="<?php echo $d['status_id_status'] ;?>">
 				<input type="hidden" name="tanggal" value="">
 
+				
+				<input id='nama_barang' readonly class='form-content' type='text' name='nama_barang' autocomplete='on' value="<?php echo $d['nama_barang'];?>" />
 				<label for='nama_barang' style='padding-top:0px'>&nbsp;Nama Barang  </label>
-				<input id='nama_barang' class='form-content' type='text' name='nama_barang' autocomplete='on' value="<?php echo $d['nama_barang'];?>" required />
-
-				<label for='no_serial' style='padding-top:0px'>&nbsp;Nomor Serial  </label>	
-				<input id='no_serial' class='form-content' type='text' name='no_serial' autocomplete='on' value="<?php echo $d['no_serial'];?>" required />
-
-				<label for='status' style='padding-top:0px'>&nbsp;Status </label>	
-				<input id='status' class='form-content' type='text' name='status' autocomplete='on' value="<?php echo $d['status'];?>" required />
+	
+				<input id='no_serial' readonly class='form-content' type='text' name='no_serial' autocomplete='on' value="<?php echo $d['no_serial'];?>" />
+				<label for='no_serial' style='padding-top:0px'>&nbsp;Nomor Serial  </label>
+	
+				<input id='status' readonly class='form-content' type='text' name='status' autocomplete='on' value="<?php echo $d['status'];?>" />
+				<label for='status' style='padding-top:0px'>&nbsp;Status </label>
 
 <?php
 	if ($d['status_id_status'] == 2) {
@@ -445,12 +438,11 @@
 <?php
 	} else {
 ?>
-				<label for='nama_client' style='padding-top:0px; ;'>&nbsp;Nama PIC </label>
 			 	<input id='nama_client' class='form-content' type='text' name='nama_client' autocomplete='on' placeholder="Masukkan Nama Pengambil Barang" required />
+			 	<label for='nama_client' style='padding-top:0px; ;'>&nbsp;Nama PIC </label>
 <?php
 	}
 ?>
-			 	<br>
 			 		</div>
 			 	</div>
 
@@ -470,7 +462,7 @@
 
 				</ul>
 
-           
+           </form>
 <?php 	} 
 ?>
 
@@ -789,6 +781,58 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 		<script src="assets/js/breakpoints.min.js"></script>
 		<script src="assets/js/util.js"></script>
 		<script src="assets/js/main.js"></script>
+		<script type="text/javascript" src="js/jquery.js"></script>
+			<script type="text/javascript" src="js/jquery.redirect.js"></script>
+			<script type="text/javascript" src="js/qrcodelib.js"></script>
+			<script type="text/javascript" src="js/webcodecamjquery.js"></script>
+
+<!-- SCAN CODE -->
+			<script type="text/javascript">
+			    var arg = 
+			    {
+			        resultFunction: function(result) 
+			        {
+			            //$('.hasilscan').append($('<input name="noijazah" value=' + result.code + ' readonly><input type="submit" value="Cek"/>'));
+			           // $.post("../cek.php", { noijazah: result.code} );
+			            var redirect = 'index.php?view=hasil#work';
+			           $.redirectPost(redirect, {serial: result.code});
+			        }
+
+			    };
+			    //var url = window.location.toString();
+			    //var url2 = 0;
+			    var decoder = $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery;
+			    // decoder.buildSelectMenu("select")data;
+
+			    // while(url2){
+			    // if (url == "localhost/pkjd/index.php#work") {
+			    	decoder.play();
+			    /*  Without visible select menu
+			        decoder.buildSelectMenu(document.createElement('select'), 'environment|back').init(arg).play();
+			    */
+				// } else {
+				// 	decoder.stop();
+
+				// }
+			// }
+			    $('select').on('change', function()
+			    {
+			        decoder.stop().play();
+			    });
+
+			    // jquery extend function
+			    $.extend(
+			    {
+			        redirectPost: function(location, args)
+			        {
+			            var form = '';
+			            $.each( args, function( key, value ) {
+			                form += '<input type="hidden" name="'+key+'" value="'+value+'">';
+			            });
+			            $('<form action="'+location+'" method="POST">'+form+'</form>').appendTo('body').submit();
+			        }
+			    });
+			</script>
 
 	</body>
 </html>
