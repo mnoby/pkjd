@@ -65,7 +65,7 @@
 						  ?>
 						</div>
 						<?php
-					}else{
+					}else {
 						include "koneksi.php";
 						$sqlLogin = mysqli_query($konek, "SELECT * FROM user WHERE Username='$user' AND Password='$p'");
 						$jml=mysqli_num_rows($sqlLogin);

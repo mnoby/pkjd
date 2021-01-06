@@ -51,30 +51,27 @@
 				</nav>
 			</header>
 
-	<!-- Main -->
-		<div id="main">
+<!-- Main -->
+	<div id="main">
 
-			<!-- Intro -->
-			<article id="intro">
+<!-- Intro -->
+	<article id="intro">
+		<!--Table List Brang-->
+			<?php
+				$view = isset($_GET['view']) ? $_GET['view'] : null;
+				switch($view)
+				{
+				default:
+			?>
 
-					<!--Table List Brang-->
-	<?php
-		$view = isset($_GET['view']) ? $_GET['view'] : null;
-
-		switch($view)
-		{
-			default:
-	?>
 			<h2 class="major">List of Items</h2>
 			<a class="button small" href="index.php?view=tambah#intro">Tambah Data</a>
-
 			<table  class="table-container res" style="width:100%; margin-top: 10px; " > 
 				<th style="text-align: center; " >Action</th>
 				<th>Nama Barang</th>
 				<th>Nomor Serial</th>
 				<th>Lokasi Gudang</th>
 				<th>Status</th>
-				
 				
 				<?php
 					$sql=mysqli_query($konek, "SELECT msk.id_barang, msk.nama_barang, msk.no_serial, gdg.id_gudang, gdg.Lokasi_gudang, sts.id_status, sts.status FROM (masuk msk left JOIN gudang gdg on msk.gudang_id_gudang = gdg.id_gudang) left JOIN status sts on msk.status_id_status = sts.id_status ORDER by  status_id_status ASC");
@@ -97,18 +94,17 @@
 								<td>$d[status]</td>";
 								$no++;
 								}
-				?>
+					?>
 									
 							</tr>
 			</table>
 
-<?php
-	break;
-	case "tambah":
+		<!--Form Tambah Item-->
+			<?php
+				break;
+				case "tambah":
 
-?>
-<!-- ======================================================================================================================================================== -->
-<!-- Form Input Barang -->
+			?>
 			<h2 class="major">TAMBAH ITEM</h2>
 			<form method="post" class="form" action="proses_crud.php?act=insert"> 
 
@@ -120,447 +116,444 @@
 
 				<label for="lokasiGudang" style="padding-top:22px">&nbsp;Lokasi Gudang</label>
 			  	<select id="lokasiGudang" class="form-content" type="text" name="gudang" required >
-			  	<option value="null"> - Pilih Lokasi Gudang - </option>
-	<?php
-		$sql=mysqli_query($konek, "SELECT * FROM gudang ORDER BY id_gudang ASC");
-		$no=1;
-		while($d=mysqli_fetch_array($sql))
-		{
-			echo "<option value='$d[id_gudang]'> $d[Lokasi_gudang]</option>";
-					$no++;
-	   		
-		}
-	?>
+					<option value="null"> - Pilih Lokasi Gudang - </option>
+					<?php
+						$sql=mysqli_query($konek, "SELECT * FROM gudang ORDER BY id_gudang ASC");
+						$no=1;
+						while($d=mysqli_fetch_array($sql))
+						{
+							echo "<option value='$d[id_gudang]'> $d[Lokasi_gudang]</option>";
+							$no++;
+							
+						}
+					?>
 			   	</select>
 
 				<label for="statusBarang" style="padding-top:22px">&nbsp;Status</label>
 				<select id="statusBarang" class="form-content" name="status" required>
-				<option value="null"> - Pilih Status Barang - </option>
-	<?php
-		$sql=mysqli_query($konek, "SELECT * FROM status ORDER BY id_status ASC");
-		$no=1;
-		while($d=mysqli_fetch_array($sql))
-		{
-			echo "<option value='$d[id_status]'> $d[status]</option>";
-	    	$no++;
-		}
-	?>
-			  	</select>
-<br>
+					<option value="null"> - Pilih Status Barang - </option>
+					<?php
+						$sql=mysqli_query($konek, "SELECT * FROM status ORDER BY id_status ASC");
+						$no=1;
+						while($d=mysqli_fetch_array($sql))
+						{
+							echo "<option value='$d[id_status]'> $d[status]</option>";
+							$no++;
+						}
+					?>
+				</select>
+				<br>
 
-<div class="col-md-6">
-		<a class="button small" style=" float:right" href="index.php#intro"> Kembali </a>
-	</div>
+				<div class="col-md-6">
+					<ul style="float : right" class="actions">
+						<li> <input class="button small" type="submit" value="SIMPAN" /> </li>
+						<li> <a class="button small"  href="index.php#intro"> Kembali </a> </li>
+					</ul>
+				</div>
+				
+			</form> 
 
-	<div class="col-md-6">
-		<input class="button small" style=" margin-right:40px; float:right" type="submit" value="SIMPAN" />
-	</div>
-			   	</form> 
-
-
-<?php
-	break;
-	case "preview":
-
-?>
-<!-- ======================================================================================================================================================== -->
-<!-- Preview QRCode -->
-		<h2 class="major">QRCode Preview</h2>
-	<?php 
-		if  (isset($_GET['id'])){
-			$Id = $_GET['id'];
-			$nb = $_GET['nb'];
-			$sql=mysqli_query($konek, "SELECT nama_barang, no_serial FROM masuk WHERE id_barang = $Id");
-			$d = mysqli_fetch_assoc($sql);
-		}		
-	?>
-		<div style="margin-left:35%">
+		
+		<!-- Preview QRCode -->
 			<?php
-				$path = "temp/";
-				$filename = $path . $nb . '.png';
-				//jika file di folder temp ada, maka hapus 
-				if (file_exists($filename)) {
-					echo "<img src='$filename' width='200' height='200' />";
-				}
+				break;
+				case "preview":
+
 			?>
 
-			<label for='nama_barang' style='padding-top:0px;'>&nbsp;<?php echo $d['nama_barang'] ?></label>	
-			<label for='nama_barang' style='padding-top:0px'>&nbsp; &nbsp; &nbsp; &nbsp;<?php echo $d['no_serial'] ?></label>
+			<h2 class="major">QRCode Preview</h2>
+			<?php 
+				if  (isset($_GET['id'])){
+					$Id = $_GET['id'];
+					$nb = $_GET['nb'];
+					$sql=mysqli_query($konek, "SELECT nama_barang, no_serial FROM masuk WHERE id_barang = $Id");
+					$d = mysqli_fetch_assoc($sql);
+				}		
+			?>
+			<div style ="align-items: center; text-align: center;">
+				<?php
+					$path = "temp/";
+					$filename = $path . $nb . '.png';
+					//jika file di folder temp ada, maka hapus 
+					if (file_exists($filename)) {
+						echo "<img src='$filename' width='200' height='200' />";
+					}
+				?>
 
-			<a class="button small" style=" margin-left:30px;" href="proses_crud.php?act=download&nb=<?php echo $d['nama_barang'] ?>"> Download </a>
-			<br>
-			<br>
-			<a class="button small" style=" margin-left:40px;" href="index.php#intro"> Kembali </a>
-		</div>
+				<label for='nama_barang' style='padding-top:0px;'>&nbsp;<?php echo $d['nama_barang'] ?></label>	
+				<label for='nama_barang' style='padding-top:0px'> <?php echo $d['no_serial'] ?></label>
+				
+				<div  style ="align-items: center;" >
+					<ul  class="actions">
+						<li > <a class="button small"  href="proses_crud.php?act=download&nb=<?php echo $d['nama_barang'] ?>"> Download </a> </li>
+						<li > <a class="button small"  href="index.php#intro"> Kembali </a> </li>
+					</ul>
+				</div>
+			</div>
 		
 				
 			<br>
 
-<!-- ======================================================================================================================================================== -->
-<!-- Form Edit Barang -->
-	<?php
-		break;
-		case "edit":
-	?>
+		<!-- Form Edit Barang -->
+			<?php
+				break;
+				case "edit":
+			?>
 			<h2 class="major">Update Item</h2>
 			<form method='post' class='form' action='proses_crud.php?act=edit'>
-	<?php 
-		if  (isset($_GET['id'])){
-			$Id = $_GET['id'];
-		#	$sql=mysqli_query($konek, "SELECT * FROM (masuk msk left JOIN gudang gdg on msk.gudang_id_gudang = gdg.id_gudang) left JOIN status sts on msk.status_id_status = sts.id_status");
-			$sql=mysqli_query($konek, "SELECT * FROM (masuk msk left JOIN gudang gdg on msk.gudang_id_gudang = gdg.id_gudang) left JOIN status sts on msk.status_id_status = sts.id_status WHERE msk.id_barang = $Id");
-			$d = mysqli_fetch_assoc($sql);
-		}		
-	?>
+				<?php 
+					if  (isset($_GET['id'])){
+						$Id = $_GET['id'];
+					#	$sql=mysqli_query($konek, "SELECT * FROM (masuk msk left JOIN gudang gdg on msk.gudang_id_gudang = gdg.id_gudang) left JOIN status sts on msk.status_id_status = sts.id_status");
+						$sql=mysqli_query($konek, "SELECT * FROM (masuk msk left JOIN gudang gdg on msk.gudang_id_gudang = gdg.id_gudang) left JOIN status sts on msk.status_id_status = sts.id_status WHERE msk.id_barang = $Id");
+						$d = mysqli_fetch_assoc($sql);
+					}		
+				?>
 				<input type="hidden" name="id_barang" value="<?php echo $d['id_barang'] ?>">
 				<label for='nama_barang' style='padding-top:0px'>&nbsp;Nama Barang</label>			
-			 	<input id='nama_barang' class='form-content' type='text' name='nama_barang' autocomplete='on' value ="<?php echo $d['nama_barang']; ?>" required />
-				 <input id='nama_barang' class='form-content' type='hidden' name='oldName' autocomplete='on' value ="<?php echo $d['nama_barang']; ?>"/>
+				<input id='nama_barang' class='form-content' type='text' name='nama_barang' autocomplete='on' value ="<?php echo $d['nama_barang']; ?>" required />
+				<input id='nama_barang' class='form-content' type='hidden' name='oldName' autocomplete='on' value ="<?php echo $d['nama_barang']; ?>"/>
 
 				<label for='nomor_serial' style='padding-top:22px'>&nbsp;Nomor Serial</label>
-			  	<input id='nomor_serial' class='form-content' type='text' name='no_serial' value ="<?php echo $d['no_serial']; ?>" required />
+				<input id='nomor_serial' class='form-content' type='text' name='no_serial' value ="<?php echo $d['no_serial']; ?>" required />
 
 
-<!-- DROPDOWN LOKASI GUDANG -->
-			   	<label for='lokasiGudang' style='padding-top:22px'>&nbsp;Lokasi Gudang</label>
-			  	<select id='lokasiGudang' class='form-content' type='text' name='gudang' required />
-			  	<option value="null"> - Pilih Lokasi Gudang - </option>
+					<!-- DROPDOWN LOKASI GUDANG -->
+						<label for='lokasiGudang' style='padding-top:22px'>&nbsp;Lokasi Gudang</label>
+						<select id='lokasiGudang' class='form-content' type='text' name='gudang' required />
+							<option value="null"> - Pilih Lokasi Gudang - </option>
 
-	<?php
-        $sql=mysqli_query($konek,"SELECT * FROM gudang ");
-        $no=1;
-        while ($d = mysqli_fetch_array($sql)) {
-            $no++;
+							<?php
+								$sql=mysqli_query($konek,"SELECT * FROM gudang ");
+								$no=1;
+								while ($d = mysqli_fetch_array($sql)) {
+									$no++;
 
-            $ket="";
-            if (isset($_GET['id2'])) {
-                $Id2 = trim($_GET['id2']);
+									$ket="";
+									if (isset($_GET['id2'])) {
+										$Id2 = trim($_GET['id2']);
 
-                if ($Id2==$d['id_gudang'])
-                {
-                    $ket="selected";
-                }
-        	}
-    ?>
-                <option <?php echo $ket; ?> value="<?php echo $d['id_gudang'];?>"> <?php echo $d['Lokasi_gudang'];?> </option>
-    <?php
-        }
-    ?>
-				</select>		
+										if ($Id2==$d['id_gudang'])
+										{
+											$ket="selected";
+										}
+									}
+							?>
+							<option <?php echo $ket; ?> value="<?php echo $d['id_gudang'];?>"> <?php echo $d['Lokasi_gudang'];?> </option>
+							<?php
+								}
+							?>
+						</select>		
 
-<!-- DROPDOWN STATUS -->
-				<label for='statusBarang' style='padding-top:22px'>&nbsp;Status</label>
-			 	<select id='statusBarang' class='form-content' name='status' required/>
-			 	<option value="null"> - Pilih Status Barang - </option>
-	<?php
-        $sql=mysqli_query($konek,"SELECT * FROM status");
-        $no=1;
-        while ($d = mysqli_fetch_array($sql)) {
-            $no++;
+					<!-- DROPDOWN STATUS -->
+						<label for='statusBarang' style='padding-top:22px'>&nbsp;Status</label>
+						<select id='statusBarang' class='form-content' name='status' required/>
+							<option value="null"> - Pilih Status Barang - </option>
+							<?php
+								$sql=mysqli_query($konek,"SELECT * FROM status");
+								$no=1;
+								while ($d = mysqli_fetch_array($sql)) {
+									$no++;
 
-            $ket="";
-            if (isset($_GET['id3'])) {
-                $Id3 = trim($_GET['id3']);
+									$ket="";
+									if (isset($_GET['id3'])) {
+										$Id3 = trim($_GET['id3']);
 
-                if ($Id3==$d['id_status'])
-                {
-                    $ket="selected";
-                }
-        	}
-    ?>
-                <option <?php echo $ket; ?> value="<?php echo $d['id_status'];?>"> <?php echo $d['status'];?> </option>
-    <?php
-        }
-    ?>
-				</select>
+										if ($Id3==$d['id_status'])
+										{
+											$ket="selected";
+										}
+									}
+							?>
+							<option <?php echo $ket; ?> value="<?php echo $d['id_status'];?>"> <?php echo $d['status'];?> </option>
+							<?php
+								}
+							?>
+						</select>
 
-<br>
+						<br>
 
-<div class="col-md-6">
-		<a class="button small" style=" float:right" href="index.php#intro"> Kembali </a>
-	</div>
-
-	<div class="col-md-6">
-		<input class="button small" style=" margin-right:40px; float:right" type="submit" value="Ubah" />
-	</div>
-	
+				<div class="col-md-6">
+					<ul style="float:right" class="actions">
+						<li> <input class="button small" type="submit" value="UPDATE" /> </li>
+						<li> <a class="button small"  href="index.php#intro"> Kembali </a> </li>
+					</ul>
+				</div>
+				
 			</form>
-	<?php
-		break;
-		}
-	?>
+			<?php
+				break;
+				}
+			?>
 
-		</article>
+	</article>
 
-<!-- ======================================================================================================================================================== -->
+
 <!-- SCAN -->
-		<article id="work">
-<?php
-		$view = isset($_GET['view']) ? $_GET['view'] : null;
+	<article id="work">
+		<?php
+			$view = isset($_GET['view']) ? $_GET['view'] : null;
 
-		switch($view)
-		{
+			switch($view)
+			{
 			default:
-	?>
+		?>
 
-			<h2 class="major">Scan QR Code</h2>
-			<span class="image main"></span>
-			<div class="panel-body text-center" >
+		<h2 class="major">Scan QR Code</h2>
+		<span class="image main"></span>
+		<div class="panel-body text-center" >
 			<!-- <a href="./validasi-ijazah"> Scan Now</a> -->
-				<canvas></canvas>
-				<hr>
-				<select></select>
-	    	</div>
+			<canvas></canvas>
+			<hr>
+			<select></select>
+		</div>
 
-			
-			
-<?php
-	break;
-	case "hasil":
-?>
+		<?php
+			break;
+			case "hasil":
+		?>
 
-			<h2 class="major">Scan Berhasil!</h2>
-			<span class="image main"></span>
-<?php
-        $sql=mysqli_query($konek, "SELECT * FROM (masuk msk left JOIN status sts on msk.status_id_status = sts.id_status) WHERE msk.no_serial='$_POST[serial]'");
-        $d=mysqli_fetch_array($sql);
-        if(mysqli_num_rows($sql) < 1){
-?>
+		<h2 class="major">Scan Berhasil!</h2>
+		<span class="image main"></span>
+		<?php
+			$sql=mysqli_query($konek, "SELECT * FROM (masuk msk left JOIN status sts on msk.status_id_status = sts.id_status) WHERE msk.no_serial='$_POST[serial]'");
+			$d=mysqli_fetch_array($sql);
+			if(mysqli_num_rows($sql) < 1){
+		?>
 
-			<div class="alert alert-danger">
-                <center>
-                <strong>Maaf, Data tidak ditemukan..!</strong><br>
-                <i>Silahkan menghubungi Perguruan Tinggi terkait untuk menanyakan masalah ini</i>
-                </center>
-            </div>
+		<div class="alert alert-danger">
+			<center>
+			<strong>Maaf, Data tidak ditemukan..!</strong><br>
+			<i>Silahkan menghubungi Perguruan Tinggi terkait untuk menanyakan masalah ini</i>
+			</center>
+		</div>
 
-<?php
-        }else{
-?>
-				<form method="post" action="proses_crud.php?act=insert_keluar">
-				<div class="fields">
-					<div class="field half">
-				<input type="hidden" name="id_barang" value="<?php echo $d['id_barang']; ?>">
-				<input type="hidden" name="gudang" value="<?php echo $d['gudang_id_gudang']; ?>">
-				<input type="hidden" name="status" value="<?php echo $d['status_id_status'] ;?>">
-				<input type="hidden" name="tanggal" value="">
+		<?php
+				}else{
+		?>
+		<form method="post" action="proses_crud.php?act=insert_keluar">
+			<div class="fields">
+				<div class="field half">
+					<input type="hidden" name="id_barang" value="<?php echo $d['id_barang']; ?>">
+					<input type="hidden" name="gudang" value="<?php echo $d['gudang_id_gudang']; ?>">
+					<input type="hidden" name="status" value="<?php echo $d['status_id_status'] ;?>">
+					<input type="hidden" name="tanggal" value="">
 
-				<input id='nama_barang' readonly class='form-content' type='text' name='nama_barang' autocomplete='on' value="<?php echo $d['nama_barang'];?>" />
-				<label for='nama_barang' style='padding-top:0px;'>&nbsp;Nama Barang  </label>
-	
-				<input id='no_serial' readonly class='form-content' type='text' name='no_serial' autocomplete='on' value="<?php echo $d['no_serial'];?>"/>
-				<label for='no_serial' style='padding-top:0px'>&nbsp;Nomor Serial  </label>
-	
-				<input id='status' readonly type='text' name='status' autocomplete='on' value="<?php echo $d['status'];?>" />
-				<label for='status' style='padding-top:0px'>&nbsp;Status </label>
-				
+					<input id='nama_barang' readonly class='form-content' type='text' name='nama_barang' autocomplete='on' value="<?php echo $d['nama_barang'];?>" />
+					<label for='nama_barang' style='padding-top:0px;'>&nbsp;Nama Barang  </label>
 
-<?php
-	if ($d['status_id_status'] == 2) {
-?>
-				
-<?php
-	} else {
-?>
-				
-			 	<input id='nama_client' class='form-content' type='text' name='nama_client' autocomplete='on' placeholder="Masukkan Nama Pengambil Barang" required="" />
-			 	<label for='nama_client' style='padding-top:0px; ;'>&nbsp;Nama PIC </label>
-<?php
-	}
-?>
-			 		</div>
-			 	</div>
+					<input id='no_serial' readonly class='form-content' type='text' name='no_serial' autocomplete='on' value="<?php echo $d['no_serial'];?>"/>
+					<label for='no_serial' style='padding-top:0px'>&nbsp;Nomor Serial  </label>
 
-			 	<ul class="actions" style="padding-top:0px;">
-<?php
-	if ($d['status_id_status'] == 2) {
-?>
-		<li><input type="submit" style="position: right; display:none;" value="SIMPAN" class="primary" /></li>
-<?php
-	} else {
-?>
-		<li style="padding-top:0px;"><input type="submit" style="position: right;" value="SIMPAN" class="primary" /></li>
-<?php
-	}
-?>
-					<li style="padding-top:0px;"><a class="primary" style="background-color: #FFF; border-radius: 4px; border: 0; box-shadow: inset 0 0 0 1px #ffffff; color: #1b1f22 !important; cursor: pointer; display: inline-block; font-size: 0.8rem; font-weight: 600; height: 2.75rem; letter-spacing: 0.2rem; line-height: 2.75rem; outline: 0; padding: 0 1.25rem 0 1.35rem; text-align: center; text-decoration: none; text-transform: uppercase; white-space: nowrap;" href="index.php#work"> Kembali </a></li>
+					<input id='status' readonly type='text' name='status' autocomplete='on' value="<?php echo $d['status'];?>" />
+					<label for='status' style='padding-top:0px'>&nbsp;Status </label>
+									
 
-				</ul>
+					<?php
+						if ($d['status_id_status'] == 2) {
+					?>
+									
+					<?php
+						} else {
+					?>
+									
+									<input id='nama_client' class='form-content' type='text' name='nama_client' autocomplete='on' placeholder="Masukkan Nama Pengambil Barang" required="" />
+									<label for='nama_client' style='padding-top:0px; ;'>&nbsp;Nama PIC </label>
+					<?php
+						}
+					?>
+				</div>
+			</div>
 
-           </form>
+			<ul class="actions" style="padding-top:0px;">
+				<?php
+					if ($d['status_id_status'] == 2) {
+				?>
+				<li><input type="submit" style="position: right; display:none;" value="SIMPAN" class="primary" /></li>
+				<?php
+					} else {
+				?>
+				<li style="padding-top:0px;"><input type="submit" style="position: right;" value="SIMPAN" class="primary" /></li>
+				<?php
+					}
+				?>
+				<li style="padding-top:0px;"><a class="primary" style="background-color: #FFF; border-radius: 4px; border: 0; box-shadow: inset 0 0 0 1px #ffffff; color: #1b1f22 !important; cursor: pointer; display: inline-block; font-size: 0.8rem; font-weight: 600; height: 2.75rem; letter-spacing: 0.2rem; line-height: 2.75rem; outline: 0; padding: 0 1.25rem 0 1.35rem; text-align: center; text-decoration: none; text-transform: uppercase; white-space: nowrap;" href="index.php#work"> Kembali </a></li>
+
+			</ul>
+
+        </form>
            
-<?php 	} 
-?>
+		<?php 	} 
+		?>
 
-<?php
-		break;
-		}
-?>
-		</article>
+		<?php
+			break;
+			}
+		?>
+	</article>
 
 
 <!-- SEARCH MANUAL -->
-		<article id="about">
-<?php
-	$view = isset($_GET['view']) ? $_GET['view'] : null;
-	switch ($view) {
-		default:
-?>			
-			<h2 class="major">Search by Serial Number</h2>
-			<form method="post" action="index.php?view=hasilManual#about">
-				<div class="fields">
-					<div class="field half">
-						<label for="no_serial" >Serial Number</label>
-						<input type="text" name="nomor_serial" id="no_serial" placeholder="Masukkan Nomor Serial disini" />
-					</div>
+	<article id="about">
+		<?php
+			$view = isset($_GET['view']) ? $_GET['view'] : null;
+			switch ($view) {
+				default:
+		?>			
+		<h2 class="major">Manual Searching</h2>
+		<form method="post" action="index.php?view=hasilManual#about">
+			<div class="fields">
+				<div class="field half">
+					<label for="no_serial" >Serial Number</label>
+					<input type="text" name="nomor_serial" id="no_serial" placeholder="Masukkan Nomor Serial disini" />
 				</div>
-				<ul class="actions">
-					<li><input type="submit"  value="Search" class="button small" /></li>
-				</ul>
-			</form>
+			</div>
+			<ul class="actions">
+				<li><input type="submit"  value="Search" class="button small" /></li>
+			</ul>
+		</form>
 
-<?php
-	break;
-	case "hasilManual":
+		<?php
+			break;
+			case "hasilManual":
 
-	$sql=mysqli_query($konek, "SELECT * FROM (masuk msk left JOIN status sts on msk.status_id_status = sts.id_status) WHERE msk.no_serial='$_POST[nomor_serial]'");
-        $d=mysqli_fetch_array($sql);
-        if(mysqli_num_rows($sql) < 1){
-?>
-			<div class="alert alert-danger">
-                <center>
-                <strong>Maaf, Data tidak ditemukan..!</strong><br>
+			$sql=mysqli_query($konek, "SELECT * FROM (masuk msk left JOIN status sts on msk.status_id_status = sts.id_status) WHERE msk.no_serial='$_POST[nomor_serial]'");
+			$d=mysqli_fetch_array($sql);
+			if(mysqli_num_rows($sql) < 1){
+		?>
+		<div class="alert alert-danger">
+			<center>
+				<strong>Maaf, Data tidak ditemukan..!</strong><br>
 				<i>Silahkan menghubungi Perguruan Tinggi terkait untuk menanyakan masalah ini</i>
 				<br>
 				<br>
 				<a class="button small" href="index.php#about"> Kembali </a>
-                </center>
-            </div>
+			</center>
+		</div>
 
-<?php
-        }else{
-?>
-				<h2 class="major">Nomor Serial Ditemukan!</h2>
-				<span class="image main"></span>
-				<form method="post" action="proses_crud.php?act=insert_keluar">
-				<div class="fields">
-					<div class="field half">
-				<input type="hidden" name="id_barang" value="<?php echo $d['id_barang']; ?>">
-				<input type="hidden" name="gudang" value="<?php echo $d['gudang_id_gudang']; ?>">
-				<input type="hidden" name="status" value="<?php echo $d['status_id_status'] ;?>">
-				<input type="hidden" name="tanggal" value="">
+		<?php
+				}else{
+		?>
+		<h2 class="major">Nomor Serial Ditemukan!</h2>
+		<span class="image main"></span>
+		<form method="post" action="proses_crud.php?act=insert_keluar">
+			<div class="fields">
+				<div class="field half">
+					<input type="hidden" name="id_barang" value="<?php echo $d['id_barang']; ?>">
+					<input type="hidden" name="gudang" value="<?php echo $d['gudang_id_gudang']; ?>">
+					<input type="hidden" name="status" value="<?php echo $d['status_id_status'] ;?>">
+					<input type="hidden" name="tanggal" value="">
 
-				
-				<input id='nama_barang' readonly class='form-content' type='text' name='nama_barang' autocomplete='on' value="<?php echo $d['nama_barang'];?>" />
-				<label for='nama_barang' style='padding-top:0px; font-weight: 600;'>&nbsp;Nama Barang  </label>
-	
-				<input id='no_serial' readonly class='form-content' type='text' name='no_serial' autocomplete='on' value="<?php echo $d['no_serial'];?>" />
-				<label for='no_serial' style='padding-top:0px; font-weight: 600;'>&nbsp;Nomor Serial  </label>
-	
-				<input id='status' readonly class='form-content' type='text' name='status' autocomplete='on' value="<?php echo $d['status'];?>" />
-				<label for='status' style='padding-top:0px; font-weight: 600;'>&nbsp;Status </label>
+					
+					<input id='nama_barang' readonly class='form-content' type='text' name='nama_barang' autocomplete='on' value="<?php echo $d['nama_barang'];?>" />
+					<label for='nama_barang' style='padding-top:0px; font-weight: 600;'>&nbsp;Nama Barang  </label>
 
-<?php
-	if ($d['status_id_status'] != 2) {
-?>
-			 	<input id='nama_client' class='form-content' type='text' name='nama_client' autocomplete='on' placeholder="Masukkan Nama Pengambil Barang" required />
-			 	<label for='nama_client' style='padding-top:0px; font-weight: 600;'>&nbsp;Nama PIC </label>
-<?php
-	}
-?>
-			 		</div>
-			 	</div>
+					<input id='no_serial' readonly class='form-content' type='text' name='no_serial' autocomplete='on' value="<?php echo $d['no_serial'];?>" />
+					<label for='no_serial' style='padding-top:0px; font-weight: 600;'>&nbsp;Nomor Serial  </label>
 
-			 	<ul class="actions">
-<?php
-	if ($d['status_id_status'] == 2) {
-?>
-		<li><input type="submit" style="position: right; display:none;" value="SIMPAN" class="primary" /></li>
-<?php
-	} else {
-?>
-		<li><input type="submit" value="SIMPAN" class="button small" /></li>
-<?php
-	}
-?>
-					<li><a class="button small" href="index.php#about"> Kembali </a></li>
+					<input id='status' readonly class='form-content' type='text' name='status' autocomplete='on' value="<?php echo $d['status'];?>" />
+					<label for='status' style='padding-top:0px; font-weight: 600;'>&nbsp;Status </label>
 
-				</ul>
+					<?php
+						if ($d['status_id_status'] != 2) {
+					?>
+					<input id='nama_client' class='form-content' type='text' name='nama_client' autocomplete='on' placeholder="Masukkan Nama Pengambil Barang" required />
+					<label for='nama_client' style='padding-top:0px; font-weight: 600;'>&nbsp;Nama PIC </label>
+					<?php
+						}
+					?>
+				</div>
+			</div>
 
-           </form>
-<?php 	} 
-?>
+			<ul class="actions">
+				<?php
+					if ($d['status_id_status'] == 2) {
+				?>
+				<li><input type="submit" style="position: right; display:none;" value="SIMPAN" class="primary" /></li>
+				<?php
+					} else {
+				?>
+				<li><input type="submit" value="SIMPAN" class="button small" /></li>
+				<?php
+					}
+				?>
+				<li><a class="button small" href="index.php#about"> Kembali </a></li>
 
-<?php 
+			</ul>
+
+        </form>
+		<?php 	} 
+		?>
+
+		<?php 
 			break;
-	}
-?>
+			}
+		?>
 			
-			
-		</article>
+	</article>
 
-	<!-- REPORT -->
-		<article id="report">
-			<h2 class="major">Report</h2>
-			<table class="demo-table res3" style="width:100%;  ">
-				<thead>
-					<tr>
-						<th scope = "col" class="column-primary" >Nama Barang</th>
-						<th scope = "col">No. Serial</th>
-						<th scope = "col">Lok. Gudang</th>
-						<th scope = "col">Nama PIC</th>
-						<th scope = "col">Tgl Keluar</th>
-						<th scope = "col">Tgl Kembali</th>
-						<th scope = "col" class="column-primary" >Action</th>
-					</tr>
-				</thead>
+<!-- REPORT -->
+	<article id="report">
+		<h2 class="major">Report</h2>
+		<table class="demo-table res3" style="width:100%;  ">
+			<thead>
+				<tr>
+					<th scope = "col" class="column-primary" >Nama Barang</th>
+					<th scope = "col">No. Serial</th>
+					<th scope = "col">Lok. Gudang</th>
+					<th scope = "col">Nama PIC</th>
+					<th scope = "col">Tgl Keluar</th>
+					<th scope = "col">Tgl Kembali</th>
+					<th scope = "col" class="column-primary" >Action</th>
+				</tr>
+			</thead>
 
-				<?php
-				$sql = mysqli_query($konek,"SELECT * FROM (keluar klr left JOIN masuk msk on klr.masuk_id = msk.id_barang)left JOIN gudang gdg on msk.gudang_id_gudang = gdg.id_gudang");
-				$no=1;
-				while ($d=mysqli_fetch_array($sql)) {
-				?>
-				<tbody>
-					<tr> 
-						<td data-header="Nama Barang"><?php echo $d['nama_barang']; ?>
-							<a href="#" class="more"> <i class="fa fa-chevron-down"> </i> </a>
-						</td>
-						<td data-header="No. Serial"><?php echo $d['no_serial']; ?></td>
-						<td data-header="Lok. Gudang"><?php echo $d['Lokasi_gudang']; ?></td>
-						<td data-header="Nama PIC"><?php echo $d['nama_client']; ?></td>
-						<td data-header="Tgl Keluar"><?php echo $d['tanggal_pengambilan']; ?></td>
-						<td data-header="Tgl Kembali"><?php echo $d['tanggal_kembali']; ?></td>
-						<th scope="row">
-								<ul class="actions" >
-								<?php
-								if ($d['tanggal_kembali'] == NULL){
-								?>
-								<li>
-									<br>
-									<a class="button primary"  href="proses_crud.php?act=edit_keluar&id=<?php echo $d['id_keluar']?>&nama=<?php echo $d['nama_client']?>&ambil=<?php echo $d['tanggal_pengambilan']?>&masuk=<?php echo $d['masuk_id']?>&id_barang=<?php echo $d['id_barang']?>&nama_barang=<?php echo $d['nama_barang']?>&no_serial=<?php echo $d['no_serial']?>&gudang=<?php echo $d['gudang_id_gudang']?>&status=<?php echo $d['status_id_status']?>">
-									RETURN </a>
-								</li>
-								<?php
-									} else{
-								?>
-									<br>
-								<li><a class="button" :disabled style="text-decoration: line-through"> RETURN </a> </li>
+			<?php
+			$sql = mysqli_query($konek,"SELECT * FROM (keluar klr left JOIN masuk msk on klr.masuk_id = msk.id_barang)left JOIN gudang gdg on msk.gudang_id_gudang = gdg.id_gudang");
+			$no=1;
+			while ($d=mysqli_fetch_array($sql)) {
+			?>
+			<tbody>
+				<tr> 
+					<td data-header="Nama Barang"><?php echo $d['nama_barang']; ?>
+						<a href="#" class="more"> <i class="fa fa-chevron-down"> </i> </a>
+					</td>
+					<td data-header="No. Serial"><?php echo $d['no_serial']; ?></td>
+					<td data-header="Lok. Gudang"><?php echo $d['Lokasi_gudang']; ?></td>
+					<td data-header="Nama PIC"><?php echo $d['nama_client']; ?></td>
+					<td data-header="Tgl Keluar"><?php echo $d['tanggal_pengambilan']; ?></td>
+					<td data-header="Tgl Kembali"><?php echo $d['tanggal_kembali']; ?></td>
+					<th scope="row">
+							<ul class="actions" >
+							<?php
+							if ($d['tanggal_kembali'] == NULL){
+							?>
+							<li>
+								<br>
+								<a class="button primary"  href="proses_crud.php?act=edit_keluar&id=<?php echo $d['id_keluar']?>&nama=<?php echo $d['nama_client']?>&ambil=<?php echo $d['tanggal_pengambilan']?>&masuk=<?php echo $d['masuk_id']?>&id_barang=<?php echo $d['id_barang']?>&nama_barang=<?php echo $d['nama_barang']?>&no_serial=<?php echo $d['no_serial']?>&gudang=<?php echo $d['gudang_id_gudang']?>&status=<?php echo $d['status_id_status']?>">
+								RETURN </a>
+							</li>
+							<?php
+								} else{
+							?>
+								<br>
+							<li><a class="button" :disabled style="text-decoration: line-through"> RETURN </a> </li>
 
-								<?php
-									}
-								?>
-								</ul>
-						</th>
-					</tr>
-				</tbody>
-				<?php
-				$no++;
-				}
-				?>
-			</table>
-		</article>
+							<?php
+								}
+							?>
+							</ul>
+					</th>
+				</tr>
+			</tbody>
+			<?php
+			$no++;
+			}
+			?>
+		</table>
+	</article>
 
-	<!-- Elements -->
+<!-- Elements -->
 		<article id="elements">
 			<h2 class="major">Elements</h2>
 
@@ -580,6 +573,7 @@
 				<blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem ipsum dolor sit amet nullam adipiscing eu felis.</blockquote>
 				<h4>Preformatted</h4>
 				<pre><code>i = 0;
+
 
 while (!deck.isInOrder()) {
     print 'Iteration ' + i;

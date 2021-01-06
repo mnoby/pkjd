@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 07, 2020 at 08:47 AM
+-- Generation Time: Jan 06, 2021 at 12:25 AM
 -- Server version: 10.4.10-MariaDB
 -- PHP Version: 7.3.12
 
@@ -58,17 +58,7 @@ CREATE TABLE IF NOT EXISTS `keluar` (
   `masuk_id` int(11) NOT NULL,
   PRIMARY KEY (`id_keluar`),
   KEY `masuk_id` (`masuk_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `keluar`
---
-
-INSERT INTO `keluar` (`id_keluar`, `nama_client`, `tanggal_pengambilan`, `tanggal_kembali`, `masuk_id`) VALUES
-(5, 'anti', '2020-09-19 16:53:19', '2020-09-19 17:05:37', 3),
-(6, 'anto', '2020-09-19 17:16:28', '2020-09-19 17:16:32', 3),
-(7, 'anto', '2020-09-19 17:16:47', '2020-09-19 17:17:11', 3),
-(8, 'FEBRI', '2020-10-18 10:57:03', '2020-10-18 10:58:41', 8);
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -86,15 +76,14 @@ CREATE TABLE IF NOT EXISTS `masuk` (
   PRIMARY KEY (`id_barang`),
   KEY `id_gudang` (`gudang_id_gudang`),
   KEY `id_status` (`status_id_status`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `masuk`
 --
 
 INSERT INTO `masuk` (`id_barang`, `nama_barang`, `no_serial`, `gudang_id_gudang`, `status_id_status`) VALUES
-(3, 'spatula', 1256778, 2, 1),
-(8, 'Burung', 123456, 2, 1);
+(42, 'Burung', 123456789, 1, 1);
 
 -- --------------------------------------------------------
 
