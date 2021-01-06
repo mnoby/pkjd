@@ -1,7 +1,7 @@
 	<?php
 	//ob_start();
 	session_start();
-	if(!isset($_SESSION['login'])){
+	if(!isset($_SESSION['Nama'])){
 		header('location:login.php');
 	}
 
@@ -537,7 +537,7 @@
 								?>
 								<li>
 									<br>
-									<a class="button primary"  href="proses_crud?act=edit_keluar&id=<?php echo $d['id_keluar']?>&nama=<?php echo $d['nama_client']?>&ambil=<?php echo $d['tanggal_pengambilan']?>&masuk=<?php echo $d['masuk_id']?>&id_barang=<?php echo $d['id_barang']?>&nama_barang=<?php echo $d['nama_barang']?>&no_serial=<?php echo $d['no_serial']?>&gudang=<?php echo $d['gudang_id_gudang']?>&status=<?php echo $d['status_id_status']?>">
+									<a class="button primary"  href="proses_crud.php?act=edit_keluar&id=<?php echo $d['id_keluar']?>&nama=<?php echo $d['nama_client']?>&ambil=<?php echo $d['tanggal_pengambilan']?>&masuk=<?php echo $d['masuk_id']?>&id_barang=<?php echo $d['id_barang']?>&nama_barang=<?php echo $d['nama_barang']?>&no_serial=<?php echo $d['no_serial']?>&gudang=<?php echo $d['gudang_id_gudang']?>&status=<?php echo $d['status_id_status']?>">
 									RETURN </a>
 								</li>
 								<?php
