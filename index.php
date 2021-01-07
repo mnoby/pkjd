@@ -144,12 +144,13 @@
 				</select>
 				<br>
 
-				<div class="col-md-6">
+				<div style = "padding:0 0 40px 0	" class="col-md-6">
 					<ul style="float : right" class="actions">
 						<li> <input class="button small" type="submit" value="SIMPAN" /> </li>
 						<li> <a class="button small"  href="index.php#intro"> Kembali </a> </li>
 					</ul>
 				</div>
+
 				
 			</form> 
 
@@ -273,7 +274,7 @@
 
 						<br>
 
-				<div class="col-md-6">
+				<div style = "padding:0 0 40px 0" class="col-md-6">
 					<ul style="float:right" class="actions">
 						<li> <input class="button small" type="submit" value="UPDATE" /> </li>
 						<li> <a class="button small"  href="index.php#intro"> Kembali </a> </li>
