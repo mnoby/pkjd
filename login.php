@@ -1,3 +1,11 @@
+<?php
+session_start();
+if(isset($_SESSION['Nama'])){
+	header('Location:index.php');
+	exit();
+}
+?>
+
 <!DOCTYPE HTML>
 
 <html>
@@ -68,6 +76,7 @@
 					}else {
 						include "koneksi.php";
 						$sqlLogin = mysqli_query($konek, "SELECT * FROM user WHERE Username='$user' AND Password='$p'");
+						
 						$jml=mysqli_num_rows($sqlLogin);
 						$d=mysqli_fetch_array($sqlLogin);
 						if($jml > 0){
@@ -76,7 +85,7 @@
 							$_SESSION['id']			= $d['id'];
 							$_SESSION['Username']	= $d['Username'];
 							$_SESSION['Nama']		= $d['Nama'];	
-							
+
 							header('Location:index.php');
 						}else{
 						?>

@@ -1,9 +1,6 @@
 	<?php
 	//ob_start();
 	session_start();
-	if(!isset($_SESSION['Nama'])){
-		header('location:login.php');
-	}
 
 	include "koneksi.php";
 	?>
@@ -34,10 +31,20 @@
 				<div class="content">
 					<div class="inner">
 						<h1>E-Warehouse</h1>
-						<p>Selamat Datang di aplikasi E-Warehouse <br />
-						PT. PUTRI JAYA KHARISMA PUTRI</p>
+						<?php
+						if(isset($_SESSION['Nama'])){
+						?>
 
-						<a href="logout.php">Logout</a>
+						<p>Hai <b> <?php echo $_SESSION['Nama'];?>! </b> <br />
+						Selamat Datang di aplikasi E-Warehouse <br />
+						PT. PUTRI JAYA KHARISMA PUTRI</p>
+						<p> Click Here To <a href="logout.php"><b> Logout</a> </b> </p>
+						<?php
+						}else{
+							header('location:login.php');
+							exit();
+						}
+						?>
 					</div>
 				</div>
 				<nav>
@@ -405,7 +412,7 @@
 		<form method="post" action="index.php?view=hasilManual#about">
 			<div class="fields">
 				<div class="field half">
-					<label for="no_serial" >Serial Number</label>
+					<label for="no_serial" ><b>Serial Number </b></label>
 					<input type="text" name="nomor_serial" id="no_serial" placeholder="Masukkan Nomor Serial disini" />
 				</div>
 			</div>
@@ -425,7 +432,7 @@
 		<div class="alert alert-danger">
 			<center>
 				<strong>Maaf, Data tidak ditemukan..!</strong><br>
-				<i>Silahkan menghubungi Perguruan Tinggi terkait untuk menanyakan masalah ini</i>
+				<i>Silahkan masukkan Nomor Serial yang baru</i>
 				<br>
 				<br>
 				<a class="button small" href="index.php#about"> Kembali </a>
@@ -445,21 +452,20 @@
 					<input type="hidden" name="status" value="<?php echo $d['status_id_status'] ;?>">
 					<input type="hidden" name="tanggal" value="">
 
-					
+					<label for='nama_barang' style='padding-top:10px; font-weight:bold;'>&nbsp;Nama Barang  </label>
 					<input id='nama_barang' readonly class='form-content' type='text' name='nama_barang' autocomplete='on' value="<?php echo $d['nama_barang'];?>" />
-					<label for='nama_barang' style='padding-top:0px; font-weight: 600;'>&nbsp;Nama Barang  </label>
-
+					
+					<label for='no_serial' style='padding-top:10px; font-weight: bold;'>&nbsp;Nomor Serial  </label>
 					<input id='no_serial' readonly class='form-content' type='text' name='no_serial' autocomplete='on' value="<?php echo $d['no_serial'];?>" />
-					<label for='no_serial' style='padding-top:0px; font-weight: 600;'>&nbsp;Nomor Serial  </label>
-
+					
+					<label for='status' style='padding-top:10px; font-weight: bold;'>&nbsp;Status </label>
 					<input id='status' readonly class='form-content' type='text' name='status' autocomplete='on' value="<?php echo $d['status'];?>" />
-					<label for='status' style='padding-top:0px; font-weight: 600;'>&nbsp;Status </label>
 
 					<?php
 						if ($d['status_id_status'] != 2) {
 					?>
+					<label for='nama_client' style='padding-top:10px; font-weight: bold;'>&nbsp;Nama PIC </label>
 					<input id='nama_client' class='form-content' type='text' name='nama_client' autocomplete='on' placeholder="Masukkan Nama Pengambil Barang" required />
-					<label for='nama_client' style='padding-top:0px; font-weight: 600;'>&nbsp;Nama PIC </label>
 					<?php
 						}
 					?>

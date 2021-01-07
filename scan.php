@@ -80,15 +80,14 @@
 									<input type="hidden" name="status" value="<?php echo $d['status_id_status'] ;?>">
 									<input type="hidden" name="tanggal" value="">
 
+									<label for='nama_barang' style='padding-top:10px; font-weight:bold;'>&nbsp;Nama Barang  </label>
 									<input id='nama_barang' readonly class='form-content' type='text' name='nama_barang' autocomplete='on' value="<?php echo $d['nama_barang'];?>" />
-									<label for='nama_barang' style='padding-top:0px;'>&nbsp;Nama Barang  </label>
-						
-									<input id='no_serial' readonly class='form-content' type='text' name='no_serial' autocomplete='on' value="<?php echo $d['no_serial'];?>"/>
-									<label for='no_serial' style='padding-top:0px'>&nbsp;Nomor Serial  </label>
-						
-									<input id='status' readonly type='text' name='status' autocomplete='on' value="<?php echo $d['status'];?>" />
-									<label for='status' style='padding-top:0px'>&nbsp;Status </label>
 									
+									<label for='no_serial' style='padding-top:10px; font-weight:bold; '>&nbsp;Nomor Serial  </label>
+									<input id='no_serial' readonly class='form-content' type='text' name='no_serial' autocomplete='on' value="<?php echo $d['no_serial'];?>"/>
+									
+									<label for='status' style='padding-top:10px; font-weight:bold;'>&nbsp;Status </label>
+									<input id='status' readonly type='text' name='status' autocomplete='on' value="<?php echo $d['status'];?>" />						
 										<?php
 											if ($d['status_id_status'] == 2) {
 										?>
@@ -96,9 +95,8 @@
 										<?php
 											} else {
 										?>
-									
+									<label for='nama_client' style='padding-top:10px; font-weight:bold;'>&nbsp;Nama PIC </label>
 									<input id='nama_client' class='form-content' type='text' name='nama_client' autocomplete='on' placeholder="Masukkan Nama Pengambil Barang" required="" />
-									<label for='nama_client' style='padding-top:0px; ;'>&nbsp;Nama PIC </label>
 										<?php
 											}
 										?>

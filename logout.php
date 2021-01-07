@@ -1,23 +1,20 @@
 <?php
 session_start();
 
-// $_SESSION = array();
+if(isset($_SESSION['Nama'])){
+    unset($_SESSION["login"]);
+    unset($_SESSION["id"]);
+    unset($_SESSION["Username"]);
+    unset($_SESSION["Nama"]);
+    session_destroy();
+    header('location:login.php');
+    exit();
+    
+}else{
 
-// // If it's desired to kill the session, also delete the session cookie.
-// // Note: This will destroy the session, and not just the session data!
-// if (ini_get("session.use_cookies")) {
-//     $params = session_get_cookie_params();
-//     setcookie(session_name(), '', time() - 42000,
-//         $params["path"], $params["domain"],
-//         $params["secure"], $params["httponly"]
-//     );
-// }
-// session_destroy();
-unset($_SESSION["login"]);
-unset($_SESSION["id"]);
-unset($_SESSION["Username"]);
-unset($_SESSION["Nama"]);
+    echo "failed";
+}
 
 //kembali/redirect ke halaman login.php
-header('location:login.php');
+
 ?>
